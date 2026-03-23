@@ -20,5 +20,16 @@
     "link": "",
     "note": "テスト２",
     "selected": false
+  },
+  {
+    "id": 1774252194148,
+    "cat": "エアコン",
+    "name": "テスト③",
+    "price": 30000,
+    "size": "",
+    "img": "",
+    "link": "",
+    "note": "",
+    "selected": false
   }
 ]
