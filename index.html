@@ -11,7 +11,6 @@
   h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
   .subtitle { font-size: 13px; color: #888780; margin-bottom: 1.5rem; }
 
-  /* tabs */
   .tabs { display: flex; margin-bottom: 1.5rem; border-bottom: 0.5px solid #d3d1c7; }
   .tab-btn { height: 40px; padding: 0 24px; background: none; border: none; border-bottom: 2px solid transparent; font-size: 14px; font-weight: 500; color: #888780; cursor: pointer; font-family: inherit; margin-bottom: -0.5px; transition: color 0.15s, border-color 0.15s; }
   .tab-btn.active { color: #1a1a18; border-bottom-color: #1a1a18; }
@@ -19,17 +18,12 @@
   .tab-content { display: none; }
   .tab-content.active { display: block; }
 
-  /* form */
   .form-card { background: #fff; border: 0.5px solid #d3d1c7; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; }
   .form-title { font-size: 14px; font-weight: 500; margin-bottom: 1rem; }
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .form-full { grid-column: 1 / -1; }
   .field label { display: block; font-size: 12px; color: #888780; margin-bottom: 4px; }
-  .field input, .field select, .field textarea {
-    width: 100%; border: 0.5px solid #d3d1c7; border-radius: 8px;
-    background: #fff; color: #1a1a18; font-size: 13px; padding: 0 10px;
-    outline: none; transition: border-color 0.15s; font-family: inherit;
-  }
+  .field input, .field select, .field textarea { width: 100%; border: 0.5px solid #d3d1c7; border-radius: 8px; background: #fff; color: #1a1a18; font-size: 13px; padding: 0 10px; outline: none; transition: border-color 0.15s; font-family: inherit; }
   .field input, .field select { height: 34px; }
   .field textarea { padding: 8px 10px; resize: vertical; min-height: 64px; line-height: 1.5; }
   .field input:focus, .field select:focus, .field textarea:focus { border-color: #888780; }
@@ -39,27 +33,22 @@
   .cancel-btn { height: 36px; padding: 0 16px; background: none; border: 0.5px solid #d3d1c7; border-radius: 8px; color: #888780; font-size: 14px; cursor: pointer; font-family: inherit; }
   .cancel-btn:hover { background: #f1efe8; }
 
-  /* import */
   .import-bar { background: #fff; border: 0.5px solid #d3d1c7; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   .import-bar span { font-size: 13px; color: #888780; }
   .import-btn { height: 32px; padding: 0 14px; background: #fff; border: 0.5px solid #b4b2a9; border-radius: 8px; color: #1a1a18; font-size: 13px; cursor: pointer; font-family: inherit; }
   .import-btn:hover { background: #f1efe8; }
   #file-input { display: none; }
 
-  /* list */
   .category-group { margin-bottom: 1.5rem; }
   .category-header { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; border-bottom: 0.5px solid #d3d1c7; margin-bottom: 0.5rem; }
   .category-name { font-size: 13px; font-weight: 500; color: #888780; }
   .category-subtotal { font-size: 13px; font-weight: 500; color: #888780; }
 
-  /* candidate cards (with checkbox) */
   .item-card { background: #fff; border: 0.5px solid #d3d1c7; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 10px; display: grid; grid-template-columns: 28px 80px 1fr auto; gap: 1rem; align-items: start; }
   .item-card.editing { border-color: #5f5e5a; }
   .item-card.selected { border-color: #1a1a18; }
   .item-check { display: flex; align-items: flex-start; padding-top: 3px; }
   .item-check input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: #1a1a18; }
-
-  /* estimate cards (no checkbox) */
   .est-card { background: #fff; border: 0.5px solid #d3d1c7; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 10px; display: grid; grid-template-columns: 80px 1fr auto; gap: 1rem; align-items: start; }
 
   .item-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 0.5px solid #d3d1c7; background: #f1efe8; display: block; }
@@ -77,17 +66,31 @@
   .icon-btn.del:hover { color: #A32D2D; background: #FCEBEB; }
   .btn-group { display: flex; gap: 4px; }
 
-  /* total */
   .total-card { background: #f1efe8; border-radius: 12px; padding: 1rem 1.25rem; display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
   .total-label { font-size: 14px; color: #888780; }
   .total-amount { font-size: 22px; font-weight: 500; }
   .empty { text-align: center; padding: 2rem; color: #b4b2a9; font-size: 14px; }
   .estimate-empty { text-align: center; padding: 3rem 1rem; color: #b4b2a9; font-size: 14px; line-height: 1.8; }
 
-  /* save */
-  .save-bar { position: fixed; bottom: 1.5rem; right: 1.5rem; }
+  .save-bar { position: fixed; bottom: 1.5rem; right: 1.5rem; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
   .save-btn { height: 44px; padding: 0 20px; background: #2c2c2a; border: none; border-radius: 22px; color: #f1efe8; font-size: 14px; cursor: pointer; font-family: inherit; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
   .save-btn:hover { background: #444441; }
+  .gh-btn { height: 44px; padding: 0 20px; background: #1a6fcf; border: none; border-radius: 22px; color: #fff; font-size: 14px; cursor: pointer; font-family: inherit; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  .gh-btn:hover { background: #155db0; }
+  .gh-btn:disabled { background: #b4b2a9; cursor: not-allowed; }
+  .status-msg { font-size: 12px; color: #888780; text-align: right; min-height: 16px; }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+  .modal-box { background: #fff; border-radius: 16px; padding: 1.5rem; max-width: 480px; width: 100%; display: flex; flex-direction: column; gap: 1rem; }
+  .modal-title { font-size: 15px; font-weight: 500; }
+  .modal-desc { font-size: 13px; color: #888780; line-height: 1.7; }
+  .modal-input { width: 100%; height: 34px; border: 0.5px solid #d3d1c7; border-radius: 8px; padding: 0 10px; font-size: 13px; font-family: inherit; outline: none; }
+  .modal-input:focus { border-color: #888780; }
+  .modal-btns { display: flex; gap: 8px; }
+  .modal-ok { flex: 1; height: 36px; background: #2c2c2a; border: none; border-radius: 8px; color: #f1efe8; font-size: 14px; cursor: pointer; font-family: inherit; }
+  .modal-ok:hover { background: #444441; }
+  .modal-cancel { height: 36px; padding: 0 16px; background: none; border: 0.5px solid #d3d1c7; border-radius: 8px; color: #888780; font-size: 14px; cursor: pointer; font-family: inherit; }
+  .modal-cancel:hover { background: #f1efe8; }
 
   @media (max-width: 600px) {
     .form-grid { grid-template-columns: 1fr; }
@@ -104,11 +107,10 @@
   <p class="subtitle">新居に向けて購入予定のアイテムを管理しましょう</p>
 
   <div class="tabs">
-    <button class="tab-btn active" id="tab-btn-candidates" onclick="switchTab('candidates', this)">候補一覧</button>
-    <button class="tab-btn" id="tab-btn-estimate" onclick="switchTab('estimate', this)">見積</button>
+    <button class="tab-btn active" onclick="switchTab('candidates', this)">候補一覧</button>
+    <button class="tab-btn" onclick="switchTab('estimate', this)">見積</button>
   </div>
 
-  <!-- 候補一覧 -->
   <div id="tab-candidates" class="tab-content active">
     <div class="import-bar">
       <span>以前保存したHTMLを読み込む：</span>
@@ -164,7 +166,6 @@
     </div>
   </div>
 
-  <!-- 見積 -->
   <div id="tab-estimate" class="tab-content">
     <div id="estimate-area">
       <div class="estimate-empty">「候補一覧」タブで商品のチェックボックスをオンにすると<br>ここに表示されます</div>
@@ -177,14 +178,18 @@
 </div>
 
 <div class="save-bar">
+  <div class="status-msg" id="status-msg"></div>
+  <button class="gh-btn" onclick="githubSave()">GitHubに保存</button>
   <button class="save-btn" onclick="saveAsHTML()">HTMLで保存</button>
 </div>
 
 <script id="saved-data" type="application/json">[]</script>
+<script id="gh-config" type="application/json">{"token":"","owner":"niukim","repo":"moveplan","path":"index.html","branch":"main"}</script>
 
 <script>
 let items = [];
 let editingId = null;
+let ghSha = null;
 
 (function() {
   try {
@@ -197,6 +202,10 @@ let editingId = null;
     }
   } catch(e) {}
 })();
+
+function getConfig() {
+  try { return JSON.parse(document.getElementById('gh-config').textContent); } catch(e) { return {}; }
+}
 
 function switchTab(tab, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -213,9 +222,7 @@ function toggleSelect(id) {
 }
 
 function imgHTML(item) {
-  if (item.img) {
-    return `<img class="item-img" src="${item.img}" onerror="this.style.display='none';this.nextSibling.style.display='flex';" /><div class="item-img-placeholder" style="display:none;">画像なし</div>`;
-  }
+  if (item.img) return `<img class="item-img" src="${item.img}" onerror="this.style.display='none';this.nextSibling.style.display='flex';" /><div class="item-img-placeholder" style="display:none;">画像なし</div>`;
   return `<div class="item-img-placeholder">画像なし</div>`;
 }
 
@@ -226,9 +233,7 @@ function infoHTML(item) {
   return `<div class="item-name">${item.name}</div>${sizeEl}<div style="margin-top:4px;">${detailBtn}</div>${noteEl}`;
 }
 
-function priceHTML(item) {
-  return item.price > 0 ? '¥' + item.price.toLocaleString() : '—';
-}
+function priceHTML(item) { return item.price > 0 ? '¥' + item.price.toLocaleString() : '—'; }
 
 function buildGroups(src) {
   const g = {};
@@ -238,29 +243,24 @@ function buildGroups(src) {
 
 function renderCandidates() {
   const area = document.getElementById('list-area');
-  if (items.length === 0) {
-    area.innerHTML = '<div class="empty">商品を追加するとここに表示されます</div>';
-    return;
-  }
+  if (items.length === 0) { area.innerHTML = '<div class="empty">商品を追加するとここに表示されます</div>'; return; }
   const groups = buildGroups(items);
   let html = '';
   Object.entries(groups).forEach(([cat, its]) => {
     html += `<div class="category-group"><div class="category-header"><span class="category-name">${cat}</span></div>`;
     its.forEach(item => {
       const isEditing = item.id === editingId;
-      html += `
-        <div class="item-card${isEditing ? ' editing' : ''}${item.selected ? ' selected' : ''}">
-          <div class="item-check"><input type="checkbox" ${item.selected ? 'checked' : ''} onchange="toggleSelect(${item.id})" /></div>
-          <div>${imgHTML(item)}</div>
-          <div class="item-info">${infoHTML(item)}</div>
-          <div class="item-right">
-            <div class="btn-group">
-              <button class="icon-btn" onclick="startEdit(${item.id})">✎</button>
-              <button class="icon-btn del" onclick="deleteItem(${item.id})">✕</button>
-            </div>
-            <div class="item-price">${priceHTML(item)}</div>
+      html += `<div class="item-card${isEditing ? ' editing' : ''}${item.selected ? ' selected' : ''}">
+        <div class="item-check"><input type="checkbox" ${item.selected ? 'checked' : ''} onchange="toggleSelect(${item.id})" /></div>
+        <div>${imgHTML(item)}</div>
+        <div class="item-info">${infoHTML(item)}</div>
+        <div class="item-right">
+          <div class="btn-group">
+            <button class="icon-btn" onclick="startEdit(${item.id})">✎</button>
+            <button class="icon-btn del" onclick="deleteItem(${item.id})">✕</button>
           </div>
-        </div>`;
+          <div class="item-price">${priceHTML(item)}</div>
+        </div></div>`;
     });
     html += '</div>';
   });
@@ -277,19 +277,13 @@ function renderEstimate() {
     return;
   }
   const groups = buildGroups(selected);
-  let html = '';
-  let grandTotal = 0;
+  let html = ''; let grandTotal = 0;
   Object.entries(groups).forEach(([cat, its]) => {
     const subtotal = its.reduce((s, i) => s + i.price, 0);
     grandTotal += subtotal;
     html += `<div class="category-group"><div class="category-header"><span class="category-name">${cat}</span><span class="category-subtotal">${subtotal > 0 ? '小計 ¥' + subtotal.toLocaleString() : ''}</span></div>`;
     its.forEach(item => {
-      html += `
-        <div class="est-card">
-          <div>${imgHTML(item)}</div>
-          <div class="item-info">${infoHTML(item)}</div>
-          <div class="item-right"><div class="item-price">${priceHTML(item)}</div></div>
-        </div>`;
+      html += `<div class="est-card"><div>${imgHTML(item)}</div><div class="item-info">${infoHTML(item)}</div><div class="item-right"><div class="item-price">${priceHTML(item)}</div></div></div>`;
     });
     html += '</div>';
   });
@@ -322,14 +316,11 @@ function submitForm() {
 }
 
 function clearForm() {
-  ['f-category','f-name','f-price','f-size','f-img','f-link','f-note'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
+  ['f-category','f-name','f-price','f-size','f-img','f-link','f-note'].forEach(id => { document.getElementById(id).value = ''; });
 }
 
 function cancelEdit() {
-  editingId = null;
-  clearForm();
+  editingId = null; clearForm();
   document.getElementById('form-title').textContent = '+ 商品を追加';
   document.getElementById('submit-btn').textContent = 'リストに追加';
   document.getElementById('cancel-btn').style.display = 'none';
@@ -357,18 +348,112 @@ function startEdit(id) {
 function deleteItem(id) {
   if (editingId === id) cancelEdit();
   items = items.filter(i => i.id !== id);
-  renderCandidates();
-  renderEstimate();
+  renderCandidates(); renderEstimate();
+}
+
+function buildUpdatedHTML(token) {
+  const json = JSON.stringify(items);
+  const cfg = getConfig();
+  const newCfg = JSON.stringify({ token: token || cfg.token || '', owner: cfg.owner, repo: cfg.repo, path: cfg.path, branch: cfg.branch });
+  let html = document.documentElement.outerHTML;
+  html = html.replace(/<script id="saved-data" type="application\/json">[\s\S]*?<\/script>/, `<script id="saved-data" type="application/json">${json}<\/script>`);
+  html = html.replace(/<script id="gh-config" type="application\/json">[\s\S]*?<\/script>/, `<script id="gh-config" type="application/json">${newCfg}<\/script>`);
+  return html;
+}
+
+function setStatus(msg) { document.getElementById('status-msg').textContent = msg; }
+
+async function githubSave() {
+  const cfg = getConfig();
+  let token = cfg.token;
+
+  if (!token) {
+    token = await showTokenModal();
+    if (!token) return;
+  }
+
+  const btn = document.querySelector('.gh-btn');
+  btn.disabled = true;
+  setStatus('保存中...');
+
+  try {
+    const { owner, repo, path, branch } = cfg;
+    const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+
+    // 現在のファイルのSHAを取得
+    let sha = ghSha;
+    if (!sha) {
+      const res = await fetch(apiUrl, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } });
+      if (res.ok) { const data = await res.json(); sha = data.sha; }
+    }
+
+    const content = buildUpdatedHTML(token);
+    const encoded = btoa(unescape(encodeURIComponent(content)));
+
+    const body = { message: 'データを更新', content: encoded, branch };
+    if (sha) body.sha = sha;
+
+    const putRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    if (putRes.ok) {
+      const result = await putRes.json();
+      ghSha = result.content.sha;
+      // トークンをconfigに保存
+      document.getElementById('gh-config').textContent = JSON.stringify({ token, owner, repo, path, branch });
+      setStatus('✅ GitHubに保存しました');
+      setTimeout(() => setStatus(''), 3000);
+    } else {
+      const err = await putRes.json();
+      if (putRes.status === 401) {
+        setStatus('');
+        document.getElementById('gh-config').textContent = JSON.stringify({ ...cfg, token: '' });
+        alert('トークンが無効です。再度入力してください。');
+      } else {
+        setStatus('❌ 保存に失敗しました: ' + (err.message || putRes.status));
+      }
+    }
+  } catch(e) {
+    setStatus('❌ エラー: ' + e.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function showTokenModal() {
+  return new Promise(resolve => {
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `
+      <div class="modal-box">
+        <div class="modal-title">GitHubトークンを入力</div>
+        <div class="modal-desc">
+          GitHubのPersonal Access Tokenを入力してください。<br>
+          入力したトークンはこのHTMLファイル内に保存されます。<br>
+          一度保存すると次回から入力不要になります。
+        </div>
+        <input class="modal-input" id="token-input" type="password" placeholder="github_pat_..." />
+        <div class="modal-btns">
+          <button class="modal-cancel" id="modal-cancel-btn">キャンセル</button>
+          <button class="modal-ok" id="modal-ok-btn">保存する</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+    document.getElementById('modal-ok-btn').onclick = () => {
+      const val = document.getElementById('token-input').value.trim();
+      overlay.remove();
+      resolve(val || null);
+    };
+    document.getElementById('modal-cancel-btn').onclick = () => { overlay.remove(); resolve(null); };
+  });
 }
 
 function saveAsHTML() {
-  const json = JSON.stringify(items);
-  const current = document.documentElement.outerHTML;
-  const updated = current.replace(
-    /<script id="saved-data" type="application\/json">[\s\S]*?<\/script>/,
-    `<script id="saved-data" type="application/json">${json}<\/script>`
-  );
-  const blob = new Blob([updated], { type: 'text/html;charset=utf-8' });
+  const html = buildUpdatedHTML('');
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'moving_list.html';
@@ -385,16 +470,13 @@ function importFromHTML(event) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(e.target.result, 'text/html');
       const el = doc.getElementById('saved-data');
-      if (!el) { alert('データが見つかりませんでした。このツールで保存したHTMLを選択してください。'); return; }
+      if (!el) { alert('データが見つかりませんでした。'); return; }
       const parsed = JSON.parse(el.textContent);
       if (!Array.isArray(parsed)) throw new Error();
       items = parsed;
-      renderCandidates();
-      renderEstimate();
+      renderCandidates(); renderEstimate();
       alert(`${items.length}件のデータを読み込みました！`);
-    } catch(e) {
-      alert('読み込みに失敗しました。正しいファイルを選択してください。');
-    }
+    } catch(e) { alert('読み込みに失敗しました。'); }
     event.target.value = '';
   };
   reader.readAsText(file);
