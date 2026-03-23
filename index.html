@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>引っ越し買い替えリスト</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic UI', sans-serif; background: #f5f4f0; color: #1a1a18; min-height: 100vh; }
+  .container { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+  h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #888780; margin-bottom: 1.5rem; }
+
+  /* tabs */
+  .tabs { display: flex; margin-bottom: 1.5rem; border-bottom: 0.5px solid #d3d1c7; }
+  .tab-btn { height: 40px; padding: 0 24px; background: none; border: none; border-bottom: 2px solid transparent; font-size: 14px; font-weight: 500; color: #888780; cursor: pointer; font-family: inherit; margin-bottom: -0.5px; transition: color 0.15s, border-color 0.15s; }
+  .tab-btn.active { color: #1a1a18; border-bottom-color: #1a1a18; }
+  .tab-btn:hover:not(.active) { color: #444441; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* form */
+  .form-card { background: #fff; border: 0.5px solid #d3d1c7; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; }
+  .form-title { font-size: 14px; font-weight: 500; margin-bottom: 1rem; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .form-full { grid-column: 1 / -1; }
+  .field label { display: block; font-size: 12px; color: #888780; margin-bottom: 4px; }
+  .field input, .field select, .field textarea {
+    width: 100%; border: 0.5px solid #d3d1c7; border-radius: 8px;
+    background: #fff; color: #1a1a18; font-size: 13px; padding: 0 10px;
+    outline: none; transition: border-color 0.15s; font-family: inherit;
+  }
+  .field input, .field select { height: 34px; }
+  .field textarea { padding: 8px 10px; resize: vertical; min-height: 64px; line-height: 1.5; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: #888780; }
+  .btn-row { margin-top: 1rem; display: flex; gap: 8px; }
+  .add-btn { flex: 1; height: 36px; background: #fff; border: 0.5px solid #b4b2a9; border-radius: 8px; color: #1a1a18; font-size: 14px; cursor: pointer; transition: background 0.15s; font-family: inherit; }
+  .add-btn:hover { background: #f1efe8; }
+  .cancel-btn { height: 36px; padding: 0 16px; background: none; border: 0.5px solid #d3d1c7; border-radius: 8px; color: #888780; font-size: 14px; cursor: pointer; font-family: inherit; }
+  .cancel-btn:hover { background: #f1efe8; }
+
+  /* import */
+  .import-bar { background: #fff; border: 0.5px solid #d3d1c7; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .import-bar span { font-size: 13px; color: #888780; }
+  .import-btn { height: 32px; padding: 0 14px; background: #fff; border: 0.5px solid #b4b2a9; border-radius: 8px; color: #1a1a18; font-size: 13px; cursor: pointer; font-family: inherit; }
+  .import-btn:hover { background: #f1efe8; }
+  #file-input { display: none; }
+
+  /* list */
+  .category-group { margin-bottom: 1.5rem; }
+  .category-header { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; border-bottom: 0.5px solid #d3d1c7; margin-bottom: 0.5rem; }
+  .category-name { font-size: 13px; font-weight: 500; color: #888780; }
+  .category-subtotal { font-size: 13px; font-weight: 500; color: #888780; }
+
+  /* candidate cards (with checkbox) */
+  .item-card { background: #fff; border: 0.5px solid #d3d1c7; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 10px; display: grid; grid-template-columns: 28px 80px 1fr auto; gap: 1rem; align-items: start; }
+  .item-card.editing { border-color: #5f5e5a; }
+  .item-card.selected { border-color: #1a1a18; }
+  .item-check { display: flex; align-items: flex-start; padding-top: 3px; }
+  .item-check input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: #1a1a18; }
+
+  /* estimate cards (no checkbox) */
+  .est-card { background: #fff; border: 0.5px solid #d3d1c7; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 10px; display: grid; grid-template-columns: 80px 1fr auto; gap: 1rem; align-items: start; }
+
+  .item-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 0.5px solid #d3d1c7; background: #f1efe8; display: block; }
+  .item-img-placeholder { width: 80px; height: 80px; border-radius: 8px; border: 0.5px solid #d3d1c7; background: #f1efe8; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #b4b2a9; text-align: center; }
+  .item-info { min-width: 0; }
+  .item-name { font-size: 15px; font-weight: 500; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item-size { font-size: 12px; color: #888780; margin-bottom: 6px; }
+  .item-note { font-size: 12px; color: #888780; background: #f1efe8; border-radius: 8px; padding: 5px 8px; margin-top: 6px; line-height: 1.5; }
+  .detail-btn { font-size: 12px; padding: 4px 12px; height: 28px; background: #fff; border: 0.5px solid #b4b2a9; border-radius: 8px; color: #1a1a18; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; white-space: nowrap; }
+  .detail-btn:hover { background: #f1efe8; }
+  .item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 90px; }
+  .item-price { font-size: 17px; font-weight: 500; white-space: nowrap; }
+  .icon-btn { background: none; border: none; cursor: pointer; font-size: 13px; color: #b4b2a9; padding: 2px 6px; border-radius: 4px; }
+  .icon-btn:hover { background: #f1efe8; color: #1a1a18; }
+  .icon-btn.del:hover { color: #A32D2D; background: #FCEBEB; }
+  .btn-group { display: flex; gap: 4px; }
+
+  /* total */
+  .total-card { background: #f1efe8; border-radius: 12px; padding: 1rem 1.25rem; display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+  .total-label { font-size: 14px; color: #888780; }
+  .total-amount { font-size: 22px; font-weight: 500; }
+  .empty { text-align: center; padding: 2rem; color: #b4b2a9; font-size: 14px; }
+  .estimate-empty { text-align: center; padding: 3rem 1rem; color: #b4b2a9; font-size: 14px; line-height: 1.8; }
+
+  /* save */
+  .save-bar { position: fixed; bottom: 1.5rem; right: 1.5rem; }
+  .save-btn { height: 44px; padding: 0 20px; background: #2c2c2a; border: none; border-radius: 22px; color: #f1efe8; font-size: 14px; cursor: pointer; font-family: inherit; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  .save-btn:hover { background: #444441; }
+
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-full { grid-column: 1; }
+    .item-card { grid-template-columns: 28px 60px 1fr auto; }
+    .est-card { grid-template-columns: 60px 1fr auto; }
+    .item-img, .item-img-placeholder { width: 60px; height: 60px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>引っ越し買い替えリスト</h1>
+  <p class="subtitle">新居に向けて購入予定のアイテムを管理しましょう</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-btn-candidates" onclick="switchTab('candidates', this)">候補一覧</button>
+    <button class="tab-btn" id="tab-btn-estimate" onclick="switchTab('estimate', this)">見積</button>
+  </div>
+
+  <!-- 候補一覧 -->
+  <div id="tab-candidates" class="tab-content active">
+    <div class="import-bar">
+      <span>以前保存したHTMLを読み込む：</span>
+      <button class="import-btn" onclick="document.getElementById('file-input').click()">HTMLファイルを選択</button>
+      <input type="file" id="file-input" accept=".html" onchange="importFromHTML(event)" />
+    </div>
+
+    <div class="form-card" id="main-form">
+      <div class="form-title" id="form-title">+ 商品を追加</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>カテゴリ</label>
+          <select id="f-category">
+            <option value="">選択してください</option>
+            <option>エアコン</option><option>洗濯機</option><option>食卓・ダイニング</option>
+            <option>ソファ</option><option>照明</option><option>カーテン</option>
+            <option>テレビ</option><option>リビング</option><option>家具</option><option>その他</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>商品名 / 型番</label>
+          <input id="f-name" type="text" placeholder="例: Panasonic CS-X224D" />
+        </div>
+        <div class="field">
+          <label>価格（円）</label>
+          <input id="f-price" type="number" placeholder="例: 89800" />
+        </div>
+        <div class="field">
+          <label>サイズ</label>
+          <input id="f-size" type="text" placeholder="例: W900 × D600 × H850mm" />
+        </div>
+        <div class="field form-full">
+          <label>画像URL</label>
+          <input id="f-img" type="text" placeholder="https://..." />
+        </div>
+        <div class="field form-full">
+          <label>詳細ページURL</label>
+          <input id="f-link" type="text" placeholder="https://..." />
+        </div>
+        <div class="field form-full">
+          <label>備考</label>
+          <textarea id="f-note" placeholder="例: 色はホワイト希望、奥行き60cm以内　など"></textarea>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="add-btn" id="submit-btn" onclick="submitForm()">リストに追加</button>
+        <button class="cancel-btn" id="cancel-btn" style="display:none;" onclick="cancelEdit()">キャンセル</button>
+      </div>
+    </div>
+
+    <div id="list-area">
+      <div class="empty">商品を追加するとここに表示されます</div>
+    </div>
+  </div>
+
+  <!-- 見積 -->
+  <div id="tab-estimate" class="tab-content">
+    <div id="estimate-area">
+      <div class="estimate-empty">「候補一覧」タブで商品のチェックボックスをオンにすると<br>ここに表示されます</div>
+    </div>
+    <div class="total-card" id="total-card" style="display:none;">
+      <span class="total-label">合計金額</span>
+      <span class="total-amount" id="total-amount">¥0</span>
+    </div>
+  </div>
+</div>
+
+<div class="save-bar">
+  <button class="save-btn" onclick="saveAsHTML()">HTMLで保存</button>
+</div>
+
+<script id="saved-data" type="application/json">[]</script>
+
+<script>
+let items = [];
+let editingId = null;
+
+(function() {
+  try {
+    const raw = document.getElementById('saved-data').textContent;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      items = parsed;
+      renderCandidates();
+      renderEstimate();
+    }
+  } catch(e) {}
+})();
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'estimate') renderEstimate();
+}
+
+function toggleSelect(id) {
+  const item = items.find(i => i.id === id);
+  if (item) item.selected = !item.selected;
+  renderCandidates();
+}
+
+function imgHTML(item) {
+  if (item.img) {
+    return `<img class="item-img" src="${item.img}" onerror="this.style.display='none';this.nextSibling.style.display='flex';" /><div class="item-img-placeholder" style="display:none;">画像なし</div>`;
+  }
+  return `<div class="item-img-placeholder">画像なし</div>`;
+}
+
+function infoHTML(item) {
+  const sizeEl = item.size ? `<div class="item-size">${item.size}</div>` : '';
+  const detailBtn = item.link ? `<a class="detail-btn" href="${item.link}" target="_blank">詳細ページ ↗</a>` : '';
+  const noteEl = item.note ? `<div class="item-note">📝 ${item.note}</div>` : '';
+  return `<div class="item-name">${item.name}</div>${sizeEl}<div style="margin-top:4px;">${detailBtn}</div>${noteEl}`;
+}
+
+function priceHTML(item) {
+  return item.price > 0 ? '¥' + item.price.toLocaleString() : '—';
+}
+
+function buildGroups(src) {
+  const g = {};
+  src.forEach(i => { if (!g[i.cat]) g[i.cat] = []; g[i.cat].push(i); });
+  return g;
+}
+
+function renderCandidates() {
+  const area = document.getElementById('list-area');
+  if (items.length === 0) {
+    area.innerHTML = '<div class="empty">商品を追加するとここに表示されます</div>';
+    return;
+  }
+  const groups = buildGroups(items);
+  let html = '';
+  Object.entries(groups).forEach(([cat, its]) => {
+    html += `<div class="category-group"><div class="category-header"><span class="category-name">${cat}</span></div>`;
+    its.forEach(item => {
+      const isEditing = item.id === editingId;
+      html += `
+        <div class="item-card${isEditing ? ' editing' : ''}${item.selected ? ' selected' : ''}">
+          <div class="item-check"><input type="checkbox" ${item.selected ? 'checked' : ''} onchange="toggleSelect(${item.id})" /></div>
+          <div>${imgHTML(item)}</div>
+          <div class="item-info">${infoHTML(item)}</div>
+          <div class="item-right">
+            <div class="btn-group">
+              <button class="icon-btn" onclick="startEdit(${item.id})">✎</button>
+              <button class="icon-btn del" onclick="deleteItem(${item.id})">✕</button>
+            </div>
+            <div class="item-price">${priceHTML(item)}</div>
+          </div>
+        </div>`;
+    });
+    html += '</div>';
+  });
+  area.innerHTML = html;
+}
+
+function renderEstimate() {
+  const area = document.getElementById('estimate-area');
+  const totalCard = document.getElementById('total-card');
+  const selected = items.filter(i => i.selected);
+  if (selected.length === 0) {
+    area.innerHTML = '<div class="estimate-empty">「候補一覧」タブで商品のチェックボックスをオンにすると<br>ここに表示されます</div>';
+    totalCard.style.display = 'none';
+    return;
+  }
+  const groups = buildGroups(selected);
+  let html = '';
+  let grandTotal = 0;
+  Object.entries(groups).forEach(([cat, its]) => {
+    const subtotal = its.reduce((s, i) => s + i.price, 0);
+    grandTotal += subtotal;
+    html += `<div class="category-group"><div class="category-header"><span class="category-name">${cat}</span><span class="category-subtotal">${subtotal > 0 ? '小計 ¥' + subtotal.toLocaleString() : ''}</span></div>`;
+    its.forEach(item => {
+      html += `
+        <div class="est-card">
+          <div>${imgHTML(item)}</div>
+          <div class="item-info">${infoHTML(item)}</div>
+          <div class="item-right"><div class="item-price">${priceHTML(item)}</div></div>
+        </div>`;
+    });
+    html += '</div>';
+  });
+  area.innerHTML = html;
+  document.getElementById('total-amount').textContent = '¥' + grandTotal.toLocaleString();
+  totalCard.style.display = 'flex';
+}
+
+function submitForm() {
+  const cat = document.getElementById('f-category').value.trim();
+  const name = document.getElementById('f-name').value.trim();
+  const price = parseInt(document.getElementById('f-price').value) || 0;
+  const size = document.getElementById('f-size').value.trim();
+  const img = document.getElementById('f-img').value.trim();
+  const link = document.getElementById('f-link').value.trim();
+  const note = document.getElementById('f-note').value.trim();
+  if (!cat || !name) { alert('カテゴリと商品名は必須です'); return; }
+  if (editingId !== null) {
+    const idx = items.findIndex(i => i.id === editingId);
+    if (idx !== -1) items[idx] = { ...items[idx], cat, name, price, size, img, link, note };
+    editingId = null;
+    document.getElementById('form-title').textContent = '+ 商品を追加';
+    document.getElementById('submit-btn').textContent = 'リストに追加';
+    document.getElementById('cancel-btn').style.display = 'none';
+  } else {
+    items.push({ id: Date.now(), cat, name, price, size, img, link, note, selected: false });
+  }
+  renderCandidates();
+  clearForm();
+}
+
+function clearForm() {
+  ['f-category','f-name','f-price','f-size','f-img','f-link','f-note'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+}
+
+function cancelEdit() {
+  editingId = null;
+  clearForm();
+  document.getElementById('form-title').textContent = '+ 商品を追加';
+  document.getElementById('submit-btn').textContent = 'リストに追加';
+  document.getElementById('cancel-btn').style.display = 'none';
+  renderCandidates();
+}
+
+function startEdit(id) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  editingId = id;
+  document.getElementById('f-category').value = item.cat;
+  document.getElementById('f-name').value = item.name;
+  document.getElementById('f-price').value = item.price || '';
+  document.getElementById('f-size').value = item.size;
+  document.getElementById('f-img').value = item.img;
+  document.getElementById('f-link').value = item.link;
+  document.getElementById('f-note').value = item.note;
+  document.getElementById('form-title').textContent = '編集中';
+  document.getElementById('submit-btn').textContent = '変更を保存';
+  document.getElementById('cancel-btn').style.display = 'inline-block';
+  document.getElementById('main-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  renderCandidates();
+}
+
+function deleteItem(id) {
+  if (editingId === id) cancelEdit();
+  items = items.filter(i => i.id !== id);
+  renderCandidates();
+  renderEstimate();
+}
+
+function saveAsHTML() {
+  const json = JSON.stringify(items);
+  const current = document.documentElement.outerHTML;
+  const updated = current.replace(
+    /<script id="saved-data" type="application\/json">[\s\S]*?<\/script>/,
+    `<script id="saved-data" type="application/json">${json}<\/script>`
+  );
+  const blob = new Blob([updated], { type: 'text/html;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'moving_list.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importFromHTML(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(e.target.result, 'text/html');
+      const el = doc.getElementById('saved-data');
+      if (!el) { alert('データが見つかりませんでした。このツールで保存したHTMLを選択してください。'); return; }
+      const parsed = JSON.parse(el.textContent);
+      if (!Array.isArray(parsed)) throw new Error();
+      items = parsed;
+      renderCandidates();
+      renderEstimate();
+      alert(`${items.length}件のデータを読み込みました！`);
+    } catch(e) {
+      alert('読み込みに失敗しました。正しいファイルを選択してください。');
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+</script>
+</body>
+</html>
