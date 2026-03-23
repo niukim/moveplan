@@ -184,9 +184,14 @@
 </div>
 
 <script id="saved-data" type="application/json">[]</script>
-<script id="gh-config" type="application/json">{"token":"","owner":"niukim","repo":"moveplan","path":"index.html","branch":"main"}</script>
 
 <script>
+const GH_OWNER = 'niukim';
+const GH_REPO  = 'moveplan';
+const GH_PATH  = 'index.html';
+const GH_BRANCH = 'main';
+const TOKEN_KEY = 'moveplan_gh_token';
+
 let items = [];
 let editingId = null;
 let ghSha = null;
@@ -195,17 +200,13 @@ let ghSha = null;
   try {
     const raw = document.getElementById('saved-data').textContent;
     const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed) && parsed.length > 0) {
-      items = parsed;
-      renderCandidates();
-      renderEstimate();
-    }
+    if (Array.isArray(parsed) && parsed.length > 0) { items = parsed; renderCandidates(); renderEstimate(); }
   } catch(e) {}
 })();
 
-function getConfig() {
-  try { return JSON.parse(document.getElementById('gh-config').textContent); } catch(e) { return {}; }
-}
+function getToken() { try { return localStorage.getItem(TOKEN_KEY) || ''; } catch(e) { return ''; } }
+function saveToken(t) { try { localStorage.setItem(TOKEN_KEY, t); } catch(e) {} }
+function clearToken() { try { localStorage.removeItem(TOKEN_KEY); } catch(e) {} }
 
 function switchTab(tab, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -217,8 +218,7 @@ function switchTab(tab, btn) {
 
 function toggleSelect(id) {
   const item = items.find(i => i.id === id);
-  if (item) item.selected = !item.selected;
-  renderCandidates();
+  if (item) { item.selected = !item.selected; renderCandidates(); }
 }
 
 function imgHTML(item) {
@@ -273,8 +273,7 @@ function renderEstimate() {
   const selected = items.filter(i => i.selected);
   if (selected.length === 0) {
     area.innerHTML = '<div class="estimate-empty">「候補一覧」タブで商品のチェックボックスをオンにすると<br>ここに表示されます</div>';
-    totalCard.style.display = 'none';
-    return;
+    totalCard.style.display = 'none'; return;
   }
   const groups = buildGroups(selected);
   let html = ''; let grandTotal = 0;
@@ -311,8 +310,7 @@ function submitForm() {
   } else {
     items.push({ id: Date.now(), cat, name, price, size, img, link, note, selected: false });
   }
-  renderCandidates();
-  clearForm();
+  renderCandidates(); clearForm();
 }
 
 function clearForm() {
@@ -351,25 +349,14 @@ function deleteItem(id) {
   renderCandidates(); renderEstimate();
 }
 
-function buildUpdatedHTML(token) {
-  const json = JSON.stringify(items);
-  const cfg = getConfig();
-  const newCfg = JSON.stringify({ token: token || cfg.token || '', owner: cfg.owner, repo: cfg.repo, path: cfg.path, branch: cfg.branch });
-  let html = document.documentElement.outerHTML;
-  html = html.replace(/<script id="saved-data" type="application\/json">[\s\S]*?<\/script>/, `<script id="saved-data" type="application/json">${json}<\/script>`);
-  html = html.replace(/<script id="gh-config" type="application\/json">[\s\S]*?<\/script>/, `<script id="gh-config" type="application/json">${newCfg}<\/script>`);
-  return html;
-}
-
 function setStatus(msg) { document.getElementById('status-msg').textContent = msg; }
 
 async function githubSave() {
-  const cfg = getConfig();
-  let token = cfg.token;
-
+  let token = getToken();
   if (!token) {
     token = await showTokenModal();
     if (!token) return;
+    saveToken(token);
   }
 
   const btn = document.querySelector('.gh-btn');
@@ -377,44 +364,41 @@ async function githubSave() {
   setStatus('保存中...');
 
   try {
-    const { owner, repo, path, branch } = cfg;
-    const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+    const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_PATH}`;
+    const headers = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
 
-    // 現在のファイルのSHAを取得
-    let sha = ghSha;
-    if (!sha) {
-      const res = await fetch(apiUrl, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } });
-      if (res.ok) { const data = await res.json(); sha = data.sha; }
+    // 現在のSHAを取得
+    if (!ghSha) {
+      const res = await fetch(apiUrl, { headers });
+      if (res.ok) { const d = await res.json(); ghSha = d.sha; }
     }
 
-    const content = buildUpdatedHTML(token);
-    const encoded = btoa(unescape(encodeURIComponent(content)));
+    // データだけをHTMLに埋め込んで送信（トークンは含めない）
+    const json = JSON.stringify(items);
+    let html = document.documentElement.outerHTML;
+    html = html.replace(/<script id="saved-data" type="application\/json">[\s\S]*?<\/script>/, `<script id="saved-data" type="application/json">${json}<\/script>`);
 
-    const body = { message: 'データを更新', content: encoded, branch };
-    if (sha) body.sha = sha;
+    const encoded = btoa(unescape(encodeURIComponent(html)));
+    const body = { message: 'リストを更新', content: encoded, branch: GH_BRANCH };
+    if (ghSha) body.sha = ghSha;
 
-    const putRes = await fetch(apiUrl, {
-      method: 'PUT',
-      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
+    const putRes = await fetch(apiUrl, { method: 'PUT', headers, body: JSON.stringify(body) });
 
     if (putRes.ok) {
       const result = await putRes.json();
       ghSha = result.content.sha;
-      // トークンをconfigに保存
-      document.getElementById('gh-config').textContent = JSON.stringify({ token, owner, repo, path, branch });
       setStatus('✅ GitHubに保存しました');
       setTimeout(() => setStatus(''), 3000);
     } else {
       const err = await putRes.json();
       if (putRes.status === 401) {
+        clearToken();
+        btn.disabled = false;
         setStatus('');
-        document.getElementById('gh-config').textContent = JSON.stringify({ ...cfg, token: '' });
         alert('トークンが無効です。再度入力してください。');
-      } else {
-        setStatus('❌ 保存に失敗しました: ' + (err.message || putRes.status));
+        return;
       }
+      setStatus('❌ エラー: ' + (err.message || putRes.status));
     }
   } catch(e) {
     setStatus('❌ エラー: ' + e.message);
@@ -432,8 +416,8 @@ function showTokenModal() {
         <div class="modal-title">GitHubトークンを入力</div>
         <div class="modal-desc">
           GitHubのPersonal Access Tokenを入力してください。<br>
-          入力したトークンはこのHTMLファイル内に保存されます。<br>
-          一度保存すると次回から入力不要になります。
+          トークンはこのブラウザにのみ保存され、HTMLファイルには含まれません。<br>
+          別のブラウザやPCで使う場合は再度入力が必要です。
         </div>
         <input class="modal-input" id="token-input" type="password" placeholder="github_pat_..." />
         <div class="modal-btns">
@@ -452,7 +436,9 @@ function showTokenModal() {
 }
 
 function saveAsHTML() {
-  const html = buildUpdatedHTML('');
+  const json = JSON.stringify(items);
+  let html = document.documentElement.outerHTML;
+  html = html.replace(/<script id="saved-data" type="application\/json">[\s\S]*?<\/script>/, `<script id="saved-data" type="application/json">${json}<\/script>`);
   const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
