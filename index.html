@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
+<html lang="ja"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>引っ越し買い替えリスト</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -118,7 +116,7 @@
     <div class="import-bar">
       <span>以前保存したHTMLを読み込む：</span>
       <button class="import-btn" onclick="document.getElementById('file-input').click()">HTMLファイルを選択</button>
-      <input type="file" id="file-input" accept=".html" onchange="importFromHTML(event)" />
+      <input type="file" id="file-input" accept=".html" onchange="importFromHTML(event)">
     </div>
 
     <div class="form-card" id="main-form">
@@ -135,23 +133,23 @@
         </div>
         <div class="field">
           <label>商品名 / 型番</label>
-          <input id="f-name" type="text" placeholder="例: Panasonic CS-X224D" />
+          <input id="f-name" type="text" placeholder="例: Panasonic CS-X224D">
         </div>
         <div class="field">
           <label>価格（円）</label>
-          <input id="f-price" type="number" placeholder="例: 89800" />
+          <input id="f-price" type="number" placeholder="例: 89800">
         </div>
         <div class="field">
           <label>サイズ</label>
-          <input id="f-size" type="text" placeholder="例: W900 × D600 × H850mm" />
+          <input id="f-size" type="text" placeholder="例: W900 × D600 × H850mm">
         </div>
         <div class="field form-full">
           <label>画像URL</label>
-          <input id="f-img" type="text" placeholder="https://..." />
+          <input id="f-img" type="text" placeholder="https://...">
         </div>
         <div class="field form-full">
           <label>詳細ページURL</label>
-          <input id="f-link" type="text" placeholder="https://..." />
+          <input id="f-link" type="text" placeholder="https://...">
         </div>
         <div class="field form-full">
           <label>備考</label>
@@ -181,8 +179,8 @@
 </div>
 
 <div class="save-bar">
-  <div class="status-msg" id="status-msg"></div>
-  <button class="gh-btn" onclick="githubSave()">GitHubに保存</button>
+  <div class="status-msg" id="status-msg">保存中...</div>
+  <button class="gh-btn" onclick="githubSave()" disabled="">GitHubに保存</button>
   <button class="save-btn" onclick="saveAsHTML()">HTMLで保存</button>
   <button onclick="resetToken()" style="height:32px;padding:0 14px;background:none;border:0.5px solid #b4b2a9;border-radius:16px;color:#888780;font-size:12px;cursor:pointer;font-family:inherit;">トークンをリセット</button>
 </div>
@@ -486,5 +484,6 @@ function importFromHTML(event) {
   reader.readAsText(file);
 }
 </script>
-</body>
-</html>
+
+
+</body></html>
