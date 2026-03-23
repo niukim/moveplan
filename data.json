@@ -9,5 +9,16 @@
     "link": "https://kakaku.com/item/K0001668284/",
     "note": "テスト入力",
     "selected": false
+  },
+  {
+    "id": 1774251671364,
+    "cat": "エアコン",
+    "name": "テスト②",
+    "price": 30000,
+    "size": "300x400x40",
+    "img": "",
+    "link": "",
+    "note": "テスト２",
+    "selected": false
   }
 ]
