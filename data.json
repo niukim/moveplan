@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": 1774251471936,
+    "cat": "エアコン",
+    "name": "テスト",
+    "price": 80000,
+    "size": "300x300x300",
+    "img": "",
+    "link": "https://kakaku.com/item/K0001668284/",
+    "note": "テスト入力",
+    "selected": false
+  }
+]
